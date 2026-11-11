@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('socios')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Listado de socios</h1>
+<form th:action="@{/socios}" method="get" class="form container">
+    <label>Nombre o apellidos</label>
+    <input type="text" th:field="${filtro.texto}">
+    <label>Email</label>
+    <input type="text" th:field="${filtro.email}">
+    <label>Activo</label>
+    <select th:field="${filtro.activo}">
+        <option value="">Todos</option>
+        <option value="true">Si</option>
+        <option value="false">No</option>
+    </select>
+    <input type="submit" value="Buscar">
+    <div th:if="${#lists.isEmpty(socios)}" class="error">
+        No existen socios para ese filtro
+    </div>
+    <table th:unless="${#lists.isEmpty(socios)}">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>Edad</th>
+            <th>Activo</th>
+            <th>Prestamos abiertos</th>
+            <th>Alta</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s:${socios}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.nombre}"></td>
+            <td th:text="${s.apellidos}"></td>
+            <td th:text="${s.email}"></td>
+            <td th:text="${s.edad}"></td>
+            <td th:text="${s.activo ? 'si' : 'no'}"></td>
+            <td th:text="${s.prestamosAbiertos}"></td>
+            <td th:text="${s.fechaAlta}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+
+</form>
+</body>
+</html>

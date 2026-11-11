@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('Altasocio')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Insertar socio</h1>
+<div th:if="${mensaje}" th:text="${mensaje}" class="ok"></div>
+<div th:if="${error}" th:text="${error}" class="error"></div>
+<form th:action="@{/socios/alta}" th:object="${socio}" method="post" class="form container">
+    <label>Nombre</label>
+    <input type="text" th:field="*{nombre}">
+    <label>Apellidos</label>
+    <input type="text" th:field="*{apellidos}">
+    <label>Email</label>
+    <input type="text" th:field="*{email}">
+    <label>Fecha de nacimiento</label>
+    <input type="date" th:field="*{fechaNacimiento}">
+    <input type="submit" value="Insertar">
+</form>
+</body>
+</html>
