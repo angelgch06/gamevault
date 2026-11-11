@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:fragment="menu" class="menu">
+    <ul>
+        <li>
+            <a th:href="@{/inicio}">Inicio</a>
+        </li>
+        <li>
+            <a th:href="@{/videojuegos}">Videojuegos</a>
+        </li>
+        <li>
+            <a th:href="@{/socios}">Socios</a>
+        </li>
+        <li>
+            <a th:href="@{/copias}">Copias</a>
+        </li>
+        <li>
+            <a th:href="@{/prestamos}">Prestamos</a>
+            <ul>
+                <li>
+                    <a th:href="@{/prestamos/registrar}">Registrar préstamo</a>
+                </li>
+                <li>
+                    <a th:href="@{/prestamos}">Listar préstamos</a>
+                </li>
+                <li>
+                    <a th:href="@{/prestamos/devolver}">Devolver préstamo</a>
+                </li>
+
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>
