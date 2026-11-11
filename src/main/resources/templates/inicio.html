@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('inicio')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>GameVault: Biblioteca de videojuegos</h1>
+<div class="contadores">
+    <div class="contador">
+        <span th:text="${numVideojuegos}">0</span>
+        Videojuegos
+    </div>
+    <div class="contador">
+        <span th:text="${numSocioActivos}">0</span>
+        Socios activos
+    </div>
+    <div class="contador">
+        <span th:text="${numPrestamosAbiertos}">0</span>
+        Prestamos abiertos
+    </div>
+    <div class="contador">
+        <span th:text="${numPrestamosVencidos}">0</span>
+        Prestamos vencidos
+    </div>
+</div>
+</body>
+</html>
