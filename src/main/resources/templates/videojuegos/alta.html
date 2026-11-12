@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('altaVideojuegos')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Insertar videojuego</h1>
+<div th:if="${nombreMensaje}" th:text="${nombreMensaje}" class="ok"></div>
+<div th:if="${error}" th:text="${error}" class="error"></div>
+<form th:action="@{/videojuegos/alta}" th:object="${videojuego}" method="post" class="form container">
+    <label>Titulo</label>
+    <input type="text" th:field="*{titulo}">
+    <label>Año de lanzamiento</label>
+    <input type="number" th:field="*{anioLanzamiento}">
+    <label>Pegi</label>
+    <select th:field="*{pegi}">
+        <option th:each="p:${{3,7,12,16,18}}" th:value="${p}" th:text="${p}"></option>
+    </select>
+    <label>Desarrolladora</label>
+    <select th:field="*{idDesarrolladora}">
+        <option th:each="d:${desarrolladoras}" th:value="${d.id}" th:text="${d.nombre}"></option>
+    </select>
+    <input type="submit" value="Insertar">
+</form>
+</body>
+</html>

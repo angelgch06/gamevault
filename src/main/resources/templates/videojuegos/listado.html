@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('videojuegos')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Listado de Videojuegos</h1>
+<form th:action="@{/videojuegos}" method="get" class="form container">
+    <label>Título</label>
+    <input type="text" th:field="${filtro.titulo}">
+    <label>Desarrolladora</label>
+    <select th:field="${filtro.idDesarrolladora}">
+        <option value="">Todas</option>
+        <option th:each="d:${desarrolladoras}" th:value="${d.id}" th:text="${d.nombre}"></option>
+    </select>
+    <label>Año desde</label>
+    <input type="number" th:field="${filtro.anioDesde}">
+    <label>PEGI máximo</label>
+    <select th:field="${filtro.pegiMax}">
+        <option value="">Cualquiera</option>
+        <option th:each="p : ${ { 3, 7, 12, 16, 18 } }" th:value="${p}" th:text="${p}"></option>
+    </select>
+    <label>
+        <input type="checkbox" th:field="${filtro.soloDisponibles}">
+        Solo con copias disponibles
+    </label>
+    <input type="submit" value="Buscar">
+    <div th:if="${#lists.isEmpty(videojuegos)}" class="error">
+    No existen videojuegos para ese filtro
+    </div>
+    <table th:unless="${#lists.isEmpty(videojuegos)}">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Titulo</th>
+            <th>Desarrolladora</th>
+            <th>Año</th>
+            <th>Pegi</th>
+            <th>Copias</th>
+            <th>Disponibles</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="v:${videojuegos}">
+            <td th:text="${v.id}"></td>
+            <td th:text="${v.titulo}"></td>
+            <td th:text="${v.desarrolladora}"></td>
+            <td th:text="${v.anioLanzamiento}"></td>
+            <td th:text="${v.pegi}"></td>
+            <td th:text="${v.copiasTotales}"></td>
+            <td th:text="${v.copiasDisponibles}"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>
