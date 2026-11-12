@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('devolverPrestamo')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Devolver prestamo</h1>
+<form th:action="@{/prestamos/devolver}" method="get" class="form container">
+    <label>Socio</label>
+    <input type="text" name="socio" th:value="${socio}">
+    <input type="submit" value="Buscar">
+</form>
+<div th:if="${error}" th:text="${error}" class="error"></div>
+<div th:if="${prestamoDevuelto}" class="resumen">
+    <h2>Préstamo devuelto</h2>
+    <p th:text="${prestamoDevuelto.titulo+' ('+prestamoDevuelto.plataforma+')'}"></p>
+    <p>Socio:<span th:text="${prestamoDevuelto.socio}"></span></p>
+    <p>Préstamo:<span th:text="${prestamoDevuelto.fechaPrestamo}"></span>
+    Fecha Límite:<span th:text="${prestamoDevuelto.fechaLimite}"></span>
+    </p>
+    <p>Devuelto el<span th:text="${prestamoDevuelto.fechaDevolucion}"></span>
+    Multa:<span th:text="${prestamoDevuelto.multa}"></span>€
+    </p>
+</div>
+<table th:unless="${#lists.isEmpty(prestamosAbiertos)}">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Socio</th>
+        <th>Videojuego</th>
+        <th>Límite</th>
+        <th>Estado</th>
+        <th>Devolver</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p:${prestamosAbiertos}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.socio}"></td>
+        <td th:text="${p.titulo+' ('+p.plataforma+')'}"></td>
+        <td th:text="${p.fechaLimite}"></td>
+        <td><span th:text="${p.estado}" class="estado" th:classappend="'estado-'+${p.estado}"></span></td>
+        <td>
+            <form th:action="@{/prestamos/devolver}" method="post" style="display: inline">
+                <input type="hidden" name="idPrestamo" th:value="${p.id}">
+                <label>
+                    <input type="checkbox" name="copiaDanada" th:value="false">
+                    Copia Dañada
+                </label>
+                <input type="submit" value="Devolver">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+<div th:if="${#lists.isEmpty(prestamosAbiertos)}" class="ok">No hay prestamos abiertos para mostrar</div>
+
+</body>
+</html>

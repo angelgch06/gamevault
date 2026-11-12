@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('registrarPrestamos')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Registrar prestamos</h1>
+<form th:action="@{/prestamos/registrar}" method="post" class="form container">
+    <label>Socio</label>
+    <select name="idSocio">
+        <option th:each="s : ${socios}" th:value="${s.id}" th:text="${s.nombre+' '+s.apellidos}"></option>
+    </select>
+    <label>Copia</label>
+    <select name="idCopia">
+        <option th:each="c : ${copias}" th:value="${c.id}" th:text="${c.plataforma+': '+c.titulo+' - '+c.codigoInventario}"></option>
+    </select>
+    <input type="submit" value="Registrar préstamo">
+</form>
+<div th:if="${error}" th:text="${error}" class="error"></div>
+<div th:if="${prestamoCreado}" class="resumen">
+    <h2>Préstamo registrado</h2>
+    <p><strong th:text="${prestamoCreado.titulo+' ('+prestamoCreado.plataforma+')'}"></strong></p>
+    <p>socio:<span th:text="${prestamoCreado.socio}"></span></p>
+    <p>préstamo:<span th:text="${prestamoCreado.fechaPrestamo}"></span>Fecha límite: <span th:text="${prestamoCreado.fechaLimite}"></span></p>
+
+</div>
+
+</body>
+</html>

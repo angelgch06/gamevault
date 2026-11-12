@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/cabecera :: head('prestamos')}">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<h1>Listado de prestamos</h1>
+<form th:action="@{/prestamos}" method="get" class="form container">
+<label>Socio</label>
+    <input type="text" th:field="${filtro.socio}">
+    <label>Videojuego</label>
+    <input type="text" th:field="${filtro.titulo}">
+    <label>Estado</label>
+    <select th:field="${filtro.estado}">
+        <option value="">Todos</option>
+        <option value="EN_PLAZO">En plazo</option>
+        <option value="VENCIDO">Vencido</option>
+        <option value="DEVUELTO">Devuelto</option>
+
+
+    </select>
+    <label>Desde</label>
+    <input th:field="${filtro.fechaDesde}">
+    <input type="submit" value="Buscar">
+
+</form>
+<div th:if="${#lists.isEmpty(prestamos)}" class="error">
+    No existen prestamos para ese filtro
+</div>
+<table th:unless="${#lists.isEmpty(prestamos)}">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Socio</th>
+        <th>Videojuego</th>
+        <th>Plataforma</th>
+        <th>Préstamo</th>
+        <th>Límite</th>
+        <th>Devolución</th>
+        <th>Multa</th>
+        <th>Estado</th>
+        <th>Retrasos(días)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${prestamos}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.socio}"></td>
+        <td th:text="${p.titulo}"></td>
+        <td th:text="${p.plataforma}"></td>
+        <td th:text="${p.fechaPrestamo}"></td>
+        <td th:text="${p.fechaLimite}"></td>
+        <td th:text="${p.fechaDevolucion}"></td>
+        <td th:text="${p.multa}"></td>
+        <td>
+            <span class="estado" th:classappend="'estado-'+${p.estado}" th:text="${p.estado}"></span>
+        </td>
+        <td >
+            <span th:text="${p.diasRetraso}"></span>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+</body>
+</html>
