@@ -29,7 +29,7 @@ public class CopiaRepository {
             PreparedStatement ps=conexion.prepareStatement(query);
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
-                CopiaDisponibleDTO c= new CopiaDisponibleDTO(rs.getInt("id"),rs.getString("codigo_inventario"),rs.getString("titulo"),rs.getInt("pegi"),rs.getString("plataforma"),rs.getInt("anioLanzamiento"));
+                CopiaDisponibleDTO c= new CopiaDisponibleDTO(rs.getInt("id"),rs.getString("codigo_inventario"),rs.getString("titulo"),rs.getInt("pegi"),rs.getString("plataforma"),rs.getInt("anio_lanzamiento"));
                 lista.add(c);
             }
             conexion.close();
