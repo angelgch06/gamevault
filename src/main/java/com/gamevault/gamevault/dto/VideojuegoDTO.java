@@ -1,10 +1,18 @@
 package com.gamevault.gamevault.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "clase de videjuego")
 public class VideojuegoDTO {
+    @Schema(description = "id del videojuego",example = "2")
     private int id;
+    @Schema(description = "titulo del videojuego" ,example = "gta 6")
     private String titulo;
+    @Schema(description = "año de lanzamiento del videojuego" ,example = "2026")
     private int anioLanzamiento;
+    @Schema(description = "clasificacion de edad del videojuego" ,example = "18")
     private int pegi;
+    @Schema(description = "id de la desarrolladora del videojuego" ,example = "4")
     private int idDesarrolladora;
 
 

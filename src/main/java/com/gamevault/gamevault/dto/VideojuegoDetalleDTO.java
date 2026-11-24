@@ -1,17 +1,30 @@
 package com.gamevault.gamevault.dto;
 
-//esta clase es para mandar datos a la vista, como las copias locales, copias disponibles que tiene etc...
-public class VideojuegoDetalleDTO {
-    private int id;
-    private String titulo;
-    private int anioLanzamiento;
-    private int pegi;
-    private int idDesarrolladora;
-    private String desarrolladora;
-    private int copiasTotales;
-    private int copiasDisponibles;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-    public VideojuegoDetalleDTO(int id, String titulo, int anioLanzamiento, int pegi, int idDesarrolladora, String desarrolladora, int copiasTotales, int copiasDisponibles) {
+//esta clase es para mandar datos a la vista, como las copias locales, copias disponibles que tiene etc...
+@Schema(description = "clase detalle de videjuego")
+public class VideojuegoDetalleDTO {
+    @Schema(description = "id del videojuego",example = "2")
+    private int id;
+    @Schema(description = "titulo del videojuego" ,example = "gta 6")
+    private String titulo;
+    @Schema(description = "año de lanzamiento del videojuego" ,example = "2026")
+    private int anioLanzamiento;
+    @Schema(description = "clasificacion de edad del videojuego" ,example = "18")
+    private int pegi;
+    @Schema(description = "id de la desarrolladora del videojuego" ,example = "4")
+    private int idDesarrolladora;
+    @Schema(description = "nombre de la desarrolladora",example = "Rockstar")
+    private String desarrolladora;
+    @Schema(description = "cantidad de copias del videojuego",example = "1")
+    private int copiasTotales;
+    @Schema(description = "cantidad de copias disponibles para prestar",example = "5")
+    private int copiasDisponibles;
+    @Schema(description = "indica si la copia del videojuego se puede prestar o no",example = "true")
+    private boolean disponible;
+
+    public VideojuegoDetalleDTO(int id, String titulo, int anioLanzamiento, int pegi, int idDesarrolladora, String desarrolladora, int copiasTotales, int copiasDisponibles, boolean disponible) {
         this.id = id;
         this.titulo = titulo;
         this.anioLanzamiento = anioLanzamiento;
@@ -20,6 +33,15 @@ public class VideojuegoDetalleDTO {
         this.desarrolladora = desarrolladora;
         this.copiasTotales = copiasTotales;
         this.copiasDisponibles = copiasDisponibles;
+        this.disponible = disponible;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
     public int getId() {

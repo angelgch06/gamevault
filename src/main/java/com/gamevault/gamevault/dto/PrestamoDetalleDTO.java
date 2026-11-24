@@ -1,23 +1,40 @@
 package com.gamevault.gamevault.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+@Schema(description = "detalles de un préstamo")
 public class PrestamoDetalleDTO {
+    @Schema(description = "id del préstamo", example = "1")
     private int id;
+    @Schema(description = "id del socio que realiza el préstamo",example = "3")
     private int idSocio;
+    @Schema(description = "id de la copia prestada",example = "4")
     private int idCopia;
+    @Schema(description = "fecha en la que se realiza el préstamo",example = "2-5-2024")
     private LocalDate fechaPrestamo;
+    @Schema(description = "fecha en la que se debe devolver el prestamo",example = "5-5-2024")
     private LocalDate fechaLimite;
+    @Schema(description = "fecha en la que fue devuelto el préstamo",example = "4-5-2024")
     private LocalDate fechaDevolucion;
+    @Schema(description = "cantidad a pagar por devolución fuera de fecha límite", example = "10.50")
     private double multa;
+    @Schema(description = "nombre del socio que hace el préstamo", example = "Pedro")
     private String Socio;
+    @Schema(description = "titulo de la copia prestada", example = "Gta 6")
     private String titulo;
+    @Schema(description = "nombre de la plataforma del videojuego",example = "PC")
     private String plataforma;
+    @Schema(description = "estado del préstamo",example = "En plazo")
     private String estado;
+    @Schema(description = "cantidad de días de retraso", example = "3")
     private int retraso;
+    @Schema(description = "cantidad de veces renovado",example = "5")
+    private int renovaciones = 0;
 
-    public PrestamoDetalleDTO(int id, int idSocio, int idCopia, LocalDate fechaPrestamo, LocalDate fechaLimite, LocalDate fechaDevolucion, double multa, String socio, String titulo, String plataforma) {
+    public PrestamoDetalleDTO(int id, int idSocio, int idCopia, LocalDate fechaPrestamo, LocalDate fechaLimite, LocalDate fechaDevolucion, double multa, String socio, String titulo, String plataforma, int renovaciones) {
         this.id = id;
         this.idSocio = idSocio;
         this.idCopia = idCopia;
@@ -29,6 +46,15 @@ public class PrestamoDetalleDTO {
         this.titulo = titulo;
         this.plataforma = plataforma;
 
+        this.renovaciones = renovaciones;
+    }
+
+   public int getRenovaciones() {
+        return renovaciones;
+    }
+
+    public void setRenovaciones(int renovaciones) {
+        this.renovaciones = renovaciones;
     }
 
     public int getId() {
@@ -146,5 +172,8 @@ public class PrestamoDetalleDTO {
         }
         //calculo el retraso
         return ChronoUnit.DAYS.between(fechaLimite,LocalDate.now());
+    }
+    public boolean puedeRenovar(){
+        return fechaDevolucion == null && !fechaLimite.isBefore(java.time.LocalDate.now()) && renovaciones==0;
     }
 }

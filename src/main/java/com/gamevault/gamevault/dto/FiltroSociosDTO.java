@@ -3,12 +3,12 @@ package com.gamevault.gamevault.dto;
 public class FiltroSociosDTO {
     private String texto;
     private String email;
-    private Boolean activo;
+    private Boolean activo=true;
 
     public FiltroSociosDTO(String texto, String email, Boolean activo) {
         this.texto = texto;
         this.email = email;
-        this.activo = activo;
+        this.activo = true;
     }
 
     public String getTexto() {
