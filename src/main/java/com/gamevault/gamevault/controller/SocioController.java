@@ -1,9 +1,7 @@
 package com.gamevault.gamevault.controller;
 
 
-import com.gamevault.gamevault.dto.FiltroSociosDTO;
-import com.gamevault.gamevault.dto.FiltroVideojuegosDTO;
-import com.gamevault.gamevault.dto.SocioDTO;
+import com.gamevault.gamevault.dto.*;
 import com.gamevault.gamevault.service.CopiaService;
 import com.gamevault.gamevault.service.PrestamoService;
 import com.gamevault.gamevault.service.SocioService;
@@ -37,10 +35,10 @@ public class SocioController {
     }
 
     @PostMapping("/alta")
-    public String alta(@ModelAttribute SocioDTO s, Model modelo){
+    public String alta(@ModelAttribute SocioRequestDTO s, Model modelo){
         try{
-            int id =sService.insert(s);
-            modelo.addAttribute("mensaje","socio insertado correctamente "+id);
+            SocioDetalleDTO socio =sService.insert(s);
+            modelo.addAttribute("mensaje","socio insertado correctamente "+socio.getId());
             modelo.addAttribute("socio",new SocioDTO());
         }catch(IllegalArgumentException e){
             modelo.addAttribute("error",e.getMessage());

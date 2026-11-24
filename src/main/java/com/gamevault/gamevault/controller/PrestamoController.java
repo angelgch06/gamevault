@@ -45,8 +45,6 @@ public class PrestamoController {
         }catch(IllegalArgumentException e){
             modelo.addAttribute("error",e.getMessage());
             //solo selecciona asique no hay que pasarle el objeto guardado
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         modelo.addAttribute("socios", sService.listarActivos());
         modelo.addAttribute("copias",cService.listarDisponibles());
@@ -65,11 +63,20 @@ public class PrestamoController {
            modelo.addAttribute("prestamoDevuelto",p);
         }catch(IllegalArgumentException e){
             modelo.addAttribute("error",e.getMessage());
-        } catch (SQLException e) {
-            modelo.addAttribute("error",e.getMessage());
         }
         modelo.addAttribute("prestamosAbiertos",pService.listarAbiertos(null));
         return "prestamos/devolver";
     }
+//    @PostMapping("/renovar")
+//    public String renovar(@RequestParam int idPrestamo,Model modelo){
+//        try{
+//            PrestamoDetalleDTO p=pService.renovar(idPrestamo);
+//            modelo.addAttribute("mensaje","Préstamo renovado correctamente"+p.getFechaLimite());
+//        }catch(IllegalArgumentException e){
+//            modelo.addAttribute("error",e.getMessage());
+//        }
+//        modelo.addAttribute("prestamosAbiertos",pService.listarAbiertos(null));
+//        return "prestamos/devolver";
+//    }
 
 }

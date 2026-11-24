@@ -4,6 +4,8 @@ package com.gamevault.gamevault.controller;
 
 import com.gamevault.gamevault.dto.FiltroVideojuegosDTO;
 import com.gamevault.gamevault.dto.VideojuegoDTO;
+import com.gamevault.gamevault.dto.VideojuegoDetalleDTO;
+import com.gamevault.gamevault.dto.VideojuegoRequestDTO;
 import com.gamevault.gamevault.service.DesarrolladoraService;
 import com.gamevault.gamevault.service.VideojuegoService;
 import org.springframework.stereotype.Controller;
@@ -41,10 +43,10 @@ public class VideojuegoController {
         return "videojuegos/alta";
     }
     @PostMapping("/alta")
-    public String alta(@ModelAttribute VideojuegoDTO v,Model modelo){
+    public String alta(@ModelAttribute VideojuegoRequestDTO v, Model modelo){
         try{
-           int id= vService.insertar(v);
-            modelo.addAttribute("nombreMensaje","videojuego "+v.getTitulo()+" insertado correctamente con id "+id);
+           VideojuegoDetalleDTO videojuego= vService.insertar(v);
+            modelo.addAttribute("nombreMensaje","videojuego "+v.getTitulo()+" insertado correctamente con id "+videojuego.getId());
             modelo.addAttribute("videojuego",new VideojuegoDTO());
         }catch(IllegalArgumentException e){
             modelo.addAttribute("error",e.getMessage());
