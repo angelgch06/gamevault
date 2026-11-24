@@ -5,6 +5,7 @@ import com.gamevault.gamevault.dto.DesarrolladoraDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class DesarrolladoraService {
@@ -17,5 +18,13 @@ public class DesarrolladoraService {
 
     public List<DesarrolladoraDTO> listarTodos(){
         return dao.listarTodos();
+    }
+
+    public DesarrolladoraDTO buscarPorId(int id){
+        DesarrolladoraDTO d=dao.buscarPorId(id);
+        if(d==null){
+            throw new NoSuchElementException("La desarrolladora no existe");
+        }
+        return d;
     }
 }

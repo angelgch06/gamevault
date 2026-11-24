@@ -2,6 +2,7 @@ package com.gamevault.gamevault.service;
 
 
 import com.gamevault.gamevault.DAO.ICopiaDAO;
+import com.gamevault.gamevault.dto.CopiaDetalleDTO;
 import com.gamevault.gamevault.dto.CopiaDisponibleDTO;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,7 @@ public class CopiaService {
     public List<CopiaDisponibleDTO> listarDisponibles(){
         return dao.listarDisponibles();
     }
-
+    public List<CopiaDetalleDTO> listarTodos(){
+        return dao.listarTodos();
+    }
 }
