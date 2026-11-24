@@ -3,6 +3,7 @@ package com.gamevault.gamevault.repository;
 import com.gamevault.gamevault.dto.FiltroSociosDTO;
 import com.gamevault.gamevault.dto.SocioDTO;
 import com.gamevault.gamevault.dto.SocioDetalleDTO;
+import com.gamevault.gamevault.dto.SocioRequestDTO;
 import com.gamevault.gamevault.service.SocioService;
 import org.springframework.stereotype.Repository;
 
@@ -77,7 +78,7 @@ public class SocioRepository {
         }
 
     }
-    public int insert(SocioDTO s){
+    public int insert(SocioRequestDTO s){
         String query="INSERT INTO socios (nombre , apellidos , email , fecha_nacimiento , fecha_alta , activo ) VALUES (?, ?, ?, ?, ?, ?)";
         try{
             Connection c=dataSource.getConnection();
@@ -201,6 +202,81 @@ public class SocioRepository {
         }
         return lista;
 
+    }
+    public boolean existePorCorreoActualizacion(String email,int id) {
+        //busca en la tabla socios y filtra por el correo que le pasamos, ponemos * porque le vamos a pedir es que nos diga si tiene un siguiente o no
+        String query="SELECT * FROM socios WHERE email = ? AND id != ? ";
+        Connection c=null;
+        try{
+            c=dataSource.getConnection();
+            PreparedStatement ps=c.prepareStatement(query);
+            ps.setString(1,email);
+            ps.setInt(2,id);
+            ResultSet rs=ps.executeQuery();
+
+            return rs.next();//retorna un booleano si encontró algo o no
+        }catch(Exception e){
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void actualizar(SocioDetalleDTO s){
+        String query="UPDATE socios SET nombre = ?, apellidos = ?, email = ?, fecha_nacimiento = ?, activo = ? WHERE id = ? ";
+        try{
+            Connection c=dataSource.getConnection();
+            PreparedStatement ps=c.prepareStatement(query);
+            ps.setString(1,s.getNombre());
+            ps.setString(2,s.getApellidos());
+            ps.setString(3,s.getEmail());
+            ps.setDate(4, Date.valueOf(s.getFechaNacimiento()));
+            ps.setBoolean(5,s.isActivo());
+            ps.setInt(6,s.getId());
+            ps.executeUpdate();
+            c.close();
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    public boolean tienePrestamos(int id){
+        String query= "SELECT COUNT(*) FROM prestamos WHERE id_socio = ? ";
+        try{
+            Connection c=dataSource.getConnection();
+            PreparedStatement ps=c.prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                if(rs.getInt(1)>0){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            return false;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    public void borrarSocio(int id){
+        String query="DELETE FROM socios WHERE id = ? ";
+        try{
+            Connection c=dataSource.getConnection();
+            PreparedStatement ps=c.prepareStatement(query);
+            ps.setInt(1,id);
+            ps.executeUpdate();
+            c.close();
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 }

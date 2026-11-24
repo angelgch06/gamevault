@@ -3,6 +3,7 @@ package com.gamevault.gamevault.repository;
 import com.gamevault.gamevault.dto.FiltroVideojuegosDTO;
 import com.gamevault.gamevault.dto.VideojuegoDTO;
 import com.gamevault.gamevault.dto.VideojuegoDetalleDTO;
+import com.gamevault.gamevault.dto.VideojuegoRequestDTO;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -53,7 +54,7 @@ public class VideojuegoRepository {
             }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                VideojuegoDetalleDTO d = new VideojuegoDetalleDTO(rs.getInt("id"), rs.getString("titulo"), rs.getInt("anio_lanzamiento"), rs.getInt("pegi"), rs.getInt("id_desarrolladora"), rs.getString("desarrolladora"), rs.getInt("copias_totales"), rs.getInt("copias_disponibles"));
+                VideojuegoDetalleDTO d = new VideojuegoDetalleDTO(rs.getInt("id"), rs.getString("titulo"), rs.getInt("anio_lanzamiento"), rs.getInt("pegi"), rs.getInt("id_desarrolladora"), rs.getString("desarrolladora"), rs.getInt("copias_totales"), rs.getInt("copias_disponibles"),rs.getInt("copias_disponibles")>0);
                 lista.add(d);
             }
             c.close();
@@ -63,7 +64,7 @@ public class VideojuegoRepository {
         return lista;
     }
 
-    public int insertar(VideojuegoDTO videojuego) {
+    public int insertar(VideojuegoRequestDTO videojuego) {
         //ponemos un query que permita insertar en la base de datos, lo que nos dice el entero que retorna es si lo hizo o no lo hizo+
         String query = "INSERT INTO videojuegos (titulo,anio_lanzamiento,pegi,id_desarrolladora) VALUES (?,?,?,?)";
         try {
@@ -71,8 +72,8 @@ public class VideojuegoRepository {
             PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             //el segundo parametro en el ps consiste en que escucha el query el query coge una clave y pide esa clave para verificar que se insertó
             ps.setString(1, videojuego.getTitulo());
-            ps.setInt(2, videojuego.getAnioLanzamiento());
-            ps.setInt(3, videojuego.getPegi());
+            ps.setInt(2, videojuego.getAnioDesde());
+            ps.setInt(3, videojuego.getPegiMax());
             ps.setInt(4, videojuego.getIdDesarrolladora());
             //execute query se utiliza cuando uso SELECT, para modificación se usa executeUpdate
             ps.executeUpdate();
@@ -98,7 +99,7 @@ public class VideojuegoRepository {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                VideojuegoDetalleDTO d = new VideojuegoDetalleDTO(rs.getInt("id"), rs.getString("titulo"), rs.getInt("anio_lanzamiento"), rs.getInt("pegi"), rs.getInt("id_desarrolladora"), rs.getString("desarrolladora"), rs.getInt("copias_totales"), rs.getInt("copias_disponibles"));
+                VideojuegoDetalleDTO d = new VideojuegoDetalleDTO(rs.getInt("id"), rs.getString("titulo"), rs.getInt("anio_lanzamiento"), rs.getInt("pegi"), rs.getInt("id_desarrolladora"), rs.getString("desarrolladora"), rs.getInt("copias_totales"), rs.getInt("copias_disponibles"),rs.getInt("copias_disponibles")>0);
                 return d;
             }
             c.close();
@@ -107,5 +108,17 @@ public class VideojuegoRepository {
 
         }
         return null;
+    }
+    public int contarVideojuegos(){
+        String query="SELECT COUNT(*) FROM videojuegos";
+        try{
+            Connection c = dataSource.getConnection();
+            PreparedStatement ps = c.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.gamevault.gamevault.repository;
 
 import com.gamevault.gamevault.dto.CopiaDTO;
+import com.gamevault.gamevault.dto.CopiaDetalleDTO;
 import com.gamevault.gamevault.dto.CopiaDisponibleDTO;
 import com.gamevault.gamevault.dto.SocioDetalleDTO;
 import org.springframework.stereotype.Repository;
@@ -82,6 +83,23 @@ public class CopiaRepository {
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public List<CopiaDetalleDTO> listarTodos(){
+        String query="SELECT c.id, c.codigo_inventario, v.titulo, p.nombre AS plataforma, c.estado, c.activa FROM copias c JOIN videojuegos v ON v.id = c.id_videojuego JOIN plataformas p ON p.id = c.id_plataforma ORDER BY c.codigo_inventario";
+        List<CopiaDetalleDTO> lista=new ArrayList<>();
+        try{
+            Connection c=dataSource.getConnection();
+            PreparedStatement ps=c.prepareStatement(query);
+            ResultSet rs= ps.executeQuery();
+
+            while(rs.next()){
+                CopiaDetalleDTO copia=new CopiaDetalleDTO(rs.getInt("id"), rs.getString("codigo_inventario"),rs.getString("titulo"),rs.getString("plataforma"),rs.getString("estado"),rs.getBoolean("activa") );
+                lista.add(copia);
+            }
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
     }
 
 

@@ -46,5 +46,27 @@ public class DesarrolladoraRepository {
         }
         return lista;
     }
+    public DesarrolladoraDTO buscarPorId(int id){
+
+        String query="SELECT id, nombre, pais FROM desarrolladoras WHERE id = ? ";
+        try{
+
+            Connection conexion=dataSource.getConnection();
+
+            PreparedStatement ps=conexion.prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs= ps.executeQuery();
+
+            if(rs.next()){
+                DesarrolladoraDTO d=new DesarrolladoraDTO(rs.getInt("id"),rs.getString("nombre"),rs.getString("pais"));
+                return d;
+            }
+            conexion.close();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 
 }

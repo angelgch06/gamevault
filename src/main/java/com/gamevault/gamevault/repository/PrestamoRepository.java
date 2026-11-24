@@ -22,7 +22,7 @@ public class PrestamoRepository {
     }
 
     public List<PrestamoDetalleDTO> buscar(FiltroPrestamosDTO filtro){
-        StringBuilder query=new StringBuilder("SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE 1=1 ");
+        StringBuilder query=new StringBuilder("SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, p.renovado, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE 1=1 ");
         List<Object> parametros=new ArrayList<>();
         if(filtro.getSocio()!=null && !filtro.getSocio().isBlank()){
             query.append("AND (s.nombre LIKE ? OR s.apellidos LIKE ?) ");
@@ -62,7 +62,7 @@ public class PrestamoRepository {
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
                 Date devolucion=rs.getDate("fecha_devolucion");
-                PrestamoDetalleDTO d=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"));
+                PrestamoDetalleDTO d=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"),0);
                 lista.add(d);
 
             }
@@ -87,7 +87,7 @@ public class PrestamoRepository {
             if(rs.next()){
                 return rs.getInt(1);
             }
-            c.close();
+
         }catch(SQLException e){
             throw new RuntimeException(e);
         }
@@ -107,7 +107,7 @@ public class PrestamoRepository {
         }
     }
     public PrestamoDetalleDTO buscarPorId(int idPrestamo){
-        String query="SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE p.id = ? ";
+        String query="SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, p.renovado, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE p.id = ? ";
         try{
             Connection c=dataSource.getConnection();
             PreparedStatement ps=c.prepareStatement(query);
@@ -115,11 +115,11 @@ public class PrestamoRepository {
             ResultSet rs= ps.executeQuery();
             if(rs.next()){
                 Date devolucion=rs.getDate("fecha_devolucion");
-                PrestamoDetalleDTO d=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"));
+                PrestamoDetalleDTO d=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"),0);
                 return d;
 
             }
-            c.close();
+            //c.close();
         }catch(SQLException e){
             throw new RuntimeException(e);
         }
@@ -155,7 +155,7 @@ public class PrestamoRepository {
         }
     }
     public List<PrestamoDetalleDTO> listarAbiertos(String socio){
-        StringBuilder query=new StringBuilder("SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE p.fecha_devolucion IS NULL ");
+        StringBuilder query=new StringBuilder("SELECT p.id, p.id_socio, p.id_copia, p.fecha_prestamo, p.fecha_limite, p.fecha_devolucion, p.multa, p.renovado, CONCAT(s.nombre,' ',s.apellidos) AS socio, v.titulo, pl.nombre AS plataforma, c.codigo_inventario FROM prestamos p JOIN socios s ON s.id=p.id_socio JOIN copias c ON c.id=p.id_copia JOIN videojuegos v ON v.id=c.id_videojuego JOIN plataformas pl ON pl.id=c.id_plataforma WHERE p.fecha_devolucion IS NULL ");
         List<Object> parametros=new ArrayList<>();
         if(socio != null && !socio.isBlank()){
             query.append("AND (s.nombre LIKE ? OR s.apellidos LIKE ?) ");
@@ -174,7 +174,7 @@ public class PrestamoRepository {
             ResultSet rs= ps.executeQuery();
             while(rs.next()){
                 Date devolucion=rs.getDate("fecha_devolucion");
-                PrestamoDetalleDTO p=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"));
+                PrestamoDetalleDTO p=new PrestamoDetalleDTO(rs.getInt("id"),rs.getInt("id_socio"),rs.getInt("id_copia"),rs.getDate("fecha_prestamo").toLocalDate(),rs.getDate("fecha_limite").toLocalDate(),devolucion==null ? null: devolucion.toLocalDate(),rs.getDouble("multa"),rs.getString("socio"),rs.getString("titulo"),rs.getString("plataforma"),0);
                 lista.add(p);
             }
             c.close();
@@ -183,5 +183,18 @@ public class PrestamoRepository {
         }
         return lista;
     }
+//    public void renovar(int idPrestamo,LocalDate nuevaFechaLimite){
+//        String query="UPDATE prestamos SET fecha_limite = ?, renovado = 1 WHERE id = ? AND fecha_devolucion IS NULL";
+//        try{
+//            Connection c=dataSource.getConnection();
+//            PreparedStatement ps=c.prepareStatement(query);
+//            ps.setDate(1,Date.valueOf(nuevaFechaLimite));
+//            ps.setInt(2,idPrestamo);
+//            ps.executeUpdate();
+//            c.close();
+//        }catch(SQLException e){
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }
