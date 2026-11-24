@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IDesarrolladoraDAO {
     List<DesarrolladoraDTO> listarTodos();
+    DesarrolladoraDTO buscarPorId(int id);
 }

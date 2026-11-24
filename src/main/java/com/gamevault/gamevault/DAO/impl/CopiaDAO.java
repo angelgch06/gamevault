@@ -2,6 +2,7 @@ package com.gamevault.gamevault.DAO.impl;
 
 import com.gamevault.gamevault.DAO.ICopiaDAO;
 import com.gamevault.gamevault.dto.CopiaDTO;
+import com.gamevault.gamevault.dto.CopiaDetalleDTO;
 import com.gamevault.gamevault.dto.CopiaDisponibleDTO;
 import com.gamevault.gamevault.repository.CopiaRepository;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,11 @@ public class CopiaDAO implements ICopiaDAO {
     @Override
     public void marcarDanada(Connection c, int idCopia) {
         rep.marcarDanada(c,idCopia);
+    }
+
+    @Override
+    public List<CopiaDetalleDTO> listarTodos() {
+        return rep.listarTodos();
     }
 
 }

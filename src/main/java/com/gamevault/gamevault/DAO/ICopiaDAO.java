@@ -1,6 +1,7 @@
 package com.gamevault.gamevault.DAO;
 
 import com.gamevault.gamevault.dto.CopiaDTO;
+import com.gamevault.gamevault.dto.CopiaDetalleDTO;
 import com.gamevault.gamevault.dto.CopiaDisponibleDTO;
 
 import java.sql.Connection;
@@ -12,5 +13,5 @@ public interface ICopiaDAO {
     CopiaDTO busqueadaPorId(int id);
     boolean estaDisponible(int idCopia) throws SQLException;
     void marcarDanada(Connection c, int idCopia);
-
+    List<CopiaDetalleDTO> listarTodos();
 }

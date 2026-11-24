@@ -64,4 +64,9 @@ public class PrestamoDAO implements IPrestamoDAO {
         return rep.listarAbiertos(socio);
     }
 
+//    @Override
+//    public void renovar(int idPrestamo, LocalDate nuevaFechaLimite) {
+//        rep.renovar(idPrestamo,nuevaFechaLimite);
+//    }
+
 }

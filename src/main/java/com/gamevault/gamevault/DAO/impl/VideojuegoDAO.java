@@ -4,6 +4,7 @@ import com.gamevault.gamevault.DAO.IVideojuegoDAO;
 import com.gamevault.gamevault.dto.FiltroVideojuegosDTO;
 import com.gamevault.gamevault.dto.VideojuegoDTO;
 import com.gamevault.gamevault.dto.VideojuegoDetalleDTO;
+import com.gamevault.gamevault.dto.VideojuegoRequestDTO;
 import com.gamevault.gamevault.repository.VideojuegoRepository;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public class VideojuegoDAO  implements IVideojuegoDAO {
     }
 
     @Override
-    public int insertar(VideojuegoDTO v) {
+    public int insertar(VideojuegoRequestDTO v) {
         return rep.insertar(v);
     }
 
@@ -31,4 +32,10 @@ public class VideojuegoDAO  implements IVideojuegoDAO {
     public VideojuegoDetalleDTO buscarDetallePorId(int id) {
         return rep.buscarDetallePorId(id);
     }
+
+    @Override
+    public int contarVideojuegos() {
+        return rep.contarVideojuegos();
+    }
+
 }

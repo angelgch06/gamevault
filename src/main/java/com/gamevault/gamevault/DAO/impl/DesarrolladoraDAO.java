@@ -21,4 +21,9 @@ public class DesarrolladoraDAO implements IDesarrolladoraDAO {
     public List<DesarrolladoraDTO> listarTodos() {
         return rep.listarTodos();
     }
+
+    @Override
+    public DesarrolladoraDTO buscarPorId(int id) {
+        return rep.buscarPorId(id);
+    }
 }

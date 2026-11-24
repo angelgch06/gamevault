@@ -14,5 +14,6 @@ public interface IPrestamoDAO {
     int contarAbiertos();
     int contarVencidos();
     List<PrestamoDetalleDTO> listarAbiertos(String socio);
+//    void renovar(int idPrestamo,LocalDate nuevaFechaLimite);
 
 }

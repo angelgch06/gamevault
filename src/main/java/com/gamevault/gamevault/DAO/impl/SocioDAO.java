@@ -4,6 +4,7 @@ import com.gamevault.gamevault.DAO.ISocioDAO;
 import com.gamevault.gamevault.dto.FiltroSociosDTO;
 import com.gamevault.gamevault.dto.SocioDTO;
 import com.gamevault.gamevault.dto.SocioDetalleDTO;
+import com.gamevault.gamevault.dto.SocioRequestDTO;
 import com.gamevault.gamevault.repository.SocioRepository;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,7 @@ public class SocioDAO implements ISocioDAO {
     }
 
     @Override
-    public int insert(SocioDTO s) {
+    public int insert(SocioRequestDTO s) {
         return rep.insert(s);
     }
 
@@ -81,6 +82,26 @@ public class SocioDAO implements ISocioDAO {
     @Override
     public List<SocioDTO> listarActivos() {
         return rep.listarActivos();
+    }
+
+    @Override
+    public boolean existePorCorreoActualizacion(String email, int id) {
+        return rep.existePorCorreoActualizacion(email,id);
+    }
+
+    @Override
+    public void actualizar(SocioDetalleDTO s) {
+        rep.actualizar(s);
+    }
+
+    @Override
+    public boolean tienePrestamos(int id) {
+        return rep.tienePrestamos(id);
+    }
+
+    @Override
+    public void borrarSocio(int id) {
+        rep.borrarSocio(id);
     }
 
 }
